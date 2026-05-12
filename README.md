@@ -1,5 +1,4 @@
-![GitHub all releases](https://img.shields.io/github/downloads/{windersegura}/{devops-winder}/total)
-
+![GitHub forks](https://img.shields.io/github/forks/{windersegura}/{devops-winder}?style=social)
 
 # Devops Winder Repo
 En este repositorio se encuentran todos los scripts y configuraciones de los diferentes proyectos
