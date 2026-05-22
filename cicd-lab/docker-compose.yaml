@@ -1,0 +1,46 @@
+version: '3.8'
+services:
+  jenkins:
+    image: jenkins/jenkins:lts-jdk17
+    container_name: cicd-jenkins
+    user: root
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./:/workspace
+    environment:
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - FLOCI_ENDPOINT=http://localhost:4566
+    networks:
+      - cicd-net
+    depends_on:
+      - floci
+
+  floci:
+    image: floci/floci:latest
+    container_name: cicd-floci
+    ports:
+      - "4566:4566"
+    environment:
+      - FLOCI_STORAGE_MODE=persistent
+      - DEBUG=1
+    volumes:
+      - floci_data:/var/lib/floci
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./scripts/init-floci.sh:/etc/localstack/init/ready.d/init.sh
+    networks:
+      - cicd-net
+
+volumes:
+  jenkins_home:
+  floci_data:
+
+networks:
+  cicd-net:
+    driver: bridge
+
